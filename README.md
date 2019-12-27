@@ -1,29 +1,4 @@
-# cbeta-web-app
+CBETA web app 版客户端，方便大众通过手机浏览器阅读经书有所得，目前此项目仍处于开发阶段，还不能很好的使用，敬请期待         
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### 技术架构
+vue-cli3.11.0 、vant2.3.3
