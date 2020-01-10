@@ -1,32 +1,41 @@
 <template>
   <div>
+    <!--顶部导航-->
     <van-nav-bar
       :title='this.$route.params.title'
       left-text="返回"
       right-text="主页"
       left-arrow
+      fixed="true"
       @click-left="onClickLeft"
       @click-right="onClickRight"
     />
+    <!--目录-->
+    <van-popup v-model="show"  position="top" :style="{ width: '40%', height:'100%'}" >
+      <van-row type="flex">
+        <van-col span="12" >
+          <van-list>
+            <van-cell
+            v-for="item in items"
+            :key="item.name"
+            :title="item.name"
+            @click="selectChapter(item.url)"
+            />
+          </van-list>
+        </van-col>
+      </van-row>
+    </van-popup>
+    <!--中间读经界面-->
     <van-row type="flex">
-      <van-col span="12" v-bind:style="{display:isshowsidebar}">
-        <van-list>
-          <van-cell
-          v-for="item in items"
-          :key="item.name"
-          :title="item.name"
-          @click="selectChapter(item.url)"
-          />
-        </van-list>
-      </van-col>
-      <van-col :span='contextWidth'>
-        <div id="readerid"  @click="hiddenSidebar">
+      <van-col :span='24'>
+        <div id="readerid">
             <span v-html="bookhtml"></span>
         </div>
       </van-col>
     </van-row>
+    <!--底部功能按钮-->
     <van-tabbar v-model="active" @change="readerset" style="z-index:2">
-      <van-tabbar-item @click="showOrHiddenSidebar">目录</van-tabbar-item>
+      <van-tabbar-item @click="showPopup">目录</van-tabbar-item>
       <van-tabbar-item >模式</van-tabbar-item>
       <van-tabbar-item >字体</van-tabbar-item>
     </van-tabbar>
@@ -39,10 +48,9 @@ export default {
   data: function () {
     return {
       bookhtml: null,
+      show: false,
       activeKey: 0,
-      isshowsidebar: 'none',
       items: [],
-      contextWidth: 24,
       active: ''
     }
   },
@@ -56,26 +64,14 @@ export default {
         'url': 'https://cbdata.dila.edu.tw/v1.2/download/html/' + this.$route.params.work + '_' + this.PrefixInteger(i, 3) + '.html'
       })
     }
+    document.body.scrollTop = document.documentElement.scrollTop = 0
   },
   methods: {
-    hiddenSidebar () {
-      this.isshowsidebar = 'none'
-      this.contextWidth = 24
-    },
-    showSidebar () {
-      this.isshowsidebar = 'inline'
-      this.contextWidth = 12
-    },
-    showOrHiddenSidebar () {
-      if (this.isshowsidebar === 'none') {
-        this.showSidebar()
-      } else {
-        this.hiddenSidebar()
-      }
+    showPopup () {
+      this.show = true
     },
     readerset (index) {
-      console.log(index)
-      console.log(this.active)
+
     },
     selectChapter (url) {
       this.requestChapter(url)
@@ -98,7 +94,8 @@ export default {
         })
     },
     onClickLeft () {
-      console.log('back')
+      // this.$router.go(-1)
+      this.$router.back(-1)
     },
     onClickRight () {
       this.$router.push({ name: 'home' })
@@ -108,6 +105,12 @@ export default {
 </script>
 
 <style>
+/*禁止横向滚动条*/
+html,body{
+  overflow:hidden;
+  overflow-y:auto;
+}
+/*经文正文样式*/
 #readerid{
   margin: 14px 14px;
 }

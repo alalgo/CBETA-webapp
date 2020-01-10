@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-    <router-view />
+    <!--只有组件路由的router.meta keepAlive为true的组件才会被缓存-->
+    <keep-alive >
+      <router-view v-if="$route.meta.keepAlive"></router-view>
+    </keep-alive>
+    <router-view v-if="!$route.meta.keepAlive"></router-view>
     <div v-if="isshow">
       <van-tabbar route>
         <van-tabbar-item
@@ -19,10 +23,10 @@
         </van-tabbar-item>
         <van-tabbar-item
           replace
-          to="/setting"
-          icon="setting-o"
+          to="/homePage"
+          icon="manager-o"
         >
-          设置
+          我的
         </van-tabbar-item>
       </van-tabbar>
     </div>

@@ -21,12 +21,21 @@ const routes = [
   {
     path: '/search',
     name: 'search',
+    meta: {
+      keepAlive: true, // 该字段表示该页面需要缓存
+      isBack: false // 用于判断上一个页面是哪个
+    },
     component: () => import('../views/Search.vue')
   },
   {
     path: '/reader',
     name: 'reader',
     component: () => import('../views/Reader.vue')
+  },
+  {
+    path: '/homePage',
+    name: 'homePage',
+    component: () => import('../views/HomePage.vue')
   }
 ]
 
