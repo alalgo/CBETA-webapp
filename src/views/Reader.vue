@@ -11,7 +11,7 @@
       @click-right="onClickRight"
     />
     <!--目录-->
-    <van-popup v-model="show"  position="top" :style="{ width: '40%', height:'100%'}" >
+    <van-popup v-model="show"  position="left" :style="{ width: '40%', height:'100%'}" :overlay-style="{backgroundColor:'rgba(192, 208, 145, 0.56)'}">
       <van-row type="flex">
         <van-col span="12" >
           <van-list>
@@ -25,10 +25,18 @@
         </van-col>
       </van-row>
     </van-popup>
+    <!--搜索时的加载提示-->
+    <div class="prompt" v-if="loading">
+      <van-loading size="24px" >加载中...</van-loading>
+    </div>
+    <!--搜索失败提示-->
+    <div class="prompt" v-if="error">
+      <span>取经失败...</span>
+    </div>
     <!--中间读经界面-->
     <van-row type="flex">
       <van-col :span='24'>
-        <div id="readerid">
+        <div id="readerid" >
             <span v-html="bookhtml"></span>
         </div>
       </van-col>
@@ -51,7 +59,9 @@ export default {
       show: false,
       activeKey: 0,
       items: [],
-      active: ''
+      active: '',
+      loading: false,
+      error: false
     }
   },
   mounted: function () {
@@ -78,6 +88,9 @@ export default {
       this.hiddenSidebar()
     },
     requestChapter (url) {
+      this.loading = true
+      this.error = false
+
       const axios = require('axios')
       axios.get(url)
         .then((response) => {
@@ -88,9 +101,11 @@ export default {
         .catch((error) => {
         // handle error
           console.log(error)
+          this.error = true
         })
         .finally(() => {
         // always executed
+          this.loading = false
         })
     },
     onClickLeft () {
@@ -113,5 +128,10 @@ html,body{
 /*经文正文样式*/
 #readerid{
   margin: 14px 14px;
+  padding-top: 9%;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC","Helvetica Neue",STHeiti,"Microsoft Yahei",Tahoma,Simsun,sans-serif;
+}
+.prompt{
+  padding-top: 30%;
 }
 </style>
